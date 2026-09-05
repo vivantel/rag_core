@@ -405,9 +405,15 @@ jobs:
 
           committed=false
           for push_attempt in 1 2 3 4 5; do
-            for resolve_attempt in 1 2 3; do
-              npm install --package-lock-only --ignore-scripts --silent && break
-              echo "Registry not yet consistent, waiting 30s (attempt $resolve_attempt)..."
+            for resolve_attempt in 1 2 3 4 5; do
+              npm install --package-lock-only --ignore-scripts --silent
+              missing=""
+              for platform in linux-x64-gnu linux-arm64-gnu darwin-arm64 win32-x64-msvc; do
+                grep -q "\"node_modules/@vivantel/virage-${platform}\"" package-lock.json || \
+                  missing="${missing} @vivantel/virage-${platform}"
+              done
+              [ -z "$missing" ] && break
+              echo "Lockfile missing:${missing} — registry not yet consistent, waiting 30s (attempt $resolve_attempt)..."
               sleep 30
             done
             node scripts/patch-lockfile-stubs.cjs
