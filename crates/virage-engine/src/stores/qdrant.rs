@@ -2,8 +2,9 @@ use std::collections::{HashMap, HashSet};
 
 use async_trait::async_trait;
 use qdrant_client::qdrant::{
-    CreateCollectionBuilder, DeletePointsBuilder, Distance, Filter, GetPointsBuilder, PointStruct,
-    ScrollPointsBuilder, SearchPointsBuilder, UpsertPointsBuilder, VectorParamsBuilder,
+    CreateCollectionBuilder, CreateFieldIndexCollectionBuilder, DeletePointsBuilder, Distance,
+    FieldType, Filter, GetPointsBuilder, PointStruct, ScrollPointsBuilder, SearchPointsBuilder,
+    UpsertPointsBuilder, VectorParamsBuilder,
 };
 use qdrant_client::{Payload, Qdrant};
 use serde_json::Value;
@@ -138,6 +139,19 @@ impl VectorStore for QdrantStore {
                 )
                 .await?;
         }
+
+        // delete_by_source filters on "source_file" (Condition::matches, an exact-match keyword
+        // filter) -- qdrant rejects filtering on an unindexed field with "Index required but not
+        // found". Unconditional and idempotent: qdrant no-ops a create_field_index call for a
+        // field that's already indexed with the same type, so this also backfills the index on any
+        // collection created before this fix, without needing a separate one-time migration.
+        client
+            .create_field_index(CreateFieldIndexCollectionBuilder::new(
+                &self.collection,
+                "source_file",
+                FieldType::Keyword,
+            ))
+            .await?;
 
         *self.client.write().await = Some(client);
         Ok(())
