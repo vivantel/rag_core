@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.36](https://github.com/vivantel/virage/compare/virage-chunker-ce-ast@v0.1.35...virage-chunker-ce-ast@v0.1.36) (2026-09-07)
+
+
+### Features
+
+* **vidoc:** Add chunker-owned citation field to DocNodeAttrs/FilterMeta ([f676db3](https://github.com/vivantel/virage/commit/f676db3526fa2e5173dde75dde17aed0fc4e44a7))
+
 ## [0.1.35](https://github.com/vivantel/virage/compare/virage-chunker-ce-ast@v0.1.34...virage-chunker-ce-ast@v0.1.35) (2026-08-20)
 
 
