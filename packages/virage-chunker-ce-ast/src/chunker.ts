@@ -88,6 +88,7 @@ type Window = {
   lineEnd?: number;
   pageStart?: number;
   pageEnd?: number;
+  citation?: string;
   breadcrumb: string[];
   lang?: string;
   codeLanguage?: string;
@@ -178,6 +179,8 @@ export function walkToChunks(root: DocNode, opts: WalkOptions): ArtifactSet[] {
       if (win.pageStart == null && seg.attrs.pageNumber != null)
         win.pageStart = seg.attrs.pageNumber;
       if (seg.attrs.pageNumber != null) win.pageEnd = seg.attrs.pageNumber;
+      if (win.citation == null && seg.attrs.citation != null)
+        win.citation = seg.attrs.citation;
       if (!win.lang && seg.attrs.lang) win.lang = seg.attrs.lang;
       if (!win.codeLanguage && seg.attrs.codeLanguage)
         win.codeLanguage = seg.attrs.codeLanguage;
@@ -241,6 +244,7 @@ export function walkToChunks(root: DocNode, opts: WalkOptions): ArtifactSet[] {
       lineEnd: win.lineEnd,
       pageStart: win.pageStart,
       pageEnd: win.pageEnd,
+      citation: win.citation,
       lang: win.lang,
       codeLanguage: win.codeLanguage,
       chunkIndex: i,

@@ -1,6 +1,6 @@
 [package]
 name    = "virage-vidoc"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "ViDoc AST — shared serde types for the Virage document node tree"
 license = "MIT OR Apache-2.0"

@@ -105,6 +105,14 @@ pub struct DocNodeAttrs {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_number: Option<u32>,
 
+    /// Chunker-owned citation override, for formats where a line number doesn't mean anything
+    /// useful (e.g. xlsx cell refs `"Sheet1!B4"`, pptx `"Slide 2, Shape 3"`). Takes precedence
+    /// over the MCP layer's own `"line N"` fallback derived from `line_start` — see
+    /// `packages/virage-agent-claude/src/search-response.ts`. `None` for formats that already
+    /// have a meaningful `line_start`/`page_number` (markdown, code, PDF).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub citation: Option<String>,
+
     /// BCP-47 language tag, e.g. "en", "de", "zh-Hans".
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lang: Option<String>,

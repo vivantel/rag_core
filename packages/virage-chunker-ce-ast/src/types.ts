@@ -31,6 +31,9 @@ export interface DocNodeAttrs {
   lineStart?: number;
   lineEnd?: number;
   pageNumber?: number;
+  /** Chunker-owned citation override (e.g. xlsx "Sheet1!B4", pptx "Slide 2, Shape 3") — see
+   * FilterMeta.citation below for how it flows through to the MCP layer. */
+  citation?: string;
   lang?: string;
   codeLanguage?: string;
   tableRow?: number;
@@ -64,6 +67,9 @@ export interface FilterMeta {
   lineEnd?: number;
   pageStart?: number;
   pageEnd?: number;
+  /** Chunker-owned citation override, preferred over the MCP layer's own "line N" fallback
+   * derived from lineStart — see packages/virage-agent-claude/src/search-response.ts. */
+  citation?: string;
   lang?: string;
   codeLanguage?: string;
   chunkIndex: number;
