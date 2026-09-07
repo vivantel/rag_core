@@ -55,6 +55,17 @@ virage index --no-upload
 virage index --watch
 ```
 
+## Metadata fields requiring re-index
+
+Some `ChunkMeta`/`DocNodeAttrs` fields are additive — they populate only on chunks processed after
+the change that introduced them ships. Chunks already in the vector store keep whatever the pipeline
+knew when they were indexed and won't gain the new field until re-embedded. Use `virage index --force`
+to backfill them across an existing index.
+
+Currently additive in this sense: `citation` (chunker-owned override — xlsx cell refs, pptx
+slide/shape refs; see IR-048) and `lineStart`/`lineEnd` on chunkers not yet backfilled (PDF, DOCX,
+LaTeX as of this writing — Markdown and tree-sitter already populate them).
+
 ## Pipeline tuning
 
 Throughput and concurrency can be tuned in `virage.config.json` under the `pipeline` key. See [config.md#pipeline](config.md#pipeline).
